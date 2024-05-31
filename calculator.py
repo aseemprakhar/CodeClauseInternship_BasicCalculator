@@ -1,34 +1,41 @@
-def add(x, y):
-    return x + y
-def subtract(x, y):
-    return x - y
-def multiply(x, y):
-    return x * y
-def divide(x, y):
-    if y == 0:
-        return "Error! Division by zero."
+import tkinter as tk
+from tkinter import messagebox
+
+def press_key(key):
+    current = entry.get()
+    if key == '=':
+        try:
+            result = eval(current)
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, str(result))
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+    elif key == 'C':
+        entry.delete(0, tk.END)
     else:
-        return x / y
-print("Select operation:")
-print("1. Add")
-print("2. Subtract")
-print("3. Multiply")
-print("4. Divide")
-while True:
-    choice = input("Enter choice(1/2/3/4): ")
-    if choice in ('1', '2', '3', '4'):
-        num1 = float(input("Enter first number: "))
-        num2 = float(input("Enter second number: "))
-        if choice == '1':
-            print(f"{num1} + {num2} = {add(num1, num2)}")
-        elif choice == '2':
-            print(f"{num1} - {num2} = {subtract(num1, num2)}")
-        elif choice == '3':
-            print(f"{num1} * {num2} = {multiply(num1, num2)}")
-        elif choice == '4':
-            print(f"{num1} / {num2} = {divide(num1, num2)}")
-        next_calculation = input("Do you want to perform another calculation? (yes/no): ")
-        if next_calculation.lower() != 'yes':
-            break
-    else:
-        print("Invalid Input")
+        entry.insert(tk.END, key)
+
+app = tk.Tk()
+app.title("Calculator")
+
+buttons = [
+    '7', '8', '9', '/',
+    '4', '5', '6', '*',
+    '1', '2', '3', '-',
+    'C', '0', '=', '+'
+]
+
+entry = tk.Entry(app, width=30, font=('Arial', 16))
+entry.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
+
+row = 1
+col = 0
+for button_text in buttons:
+    tk.Button(app, text=button_text, width=5, font=('Arial', 12),
+              command=lambda text=button_text: press_key(text)).grid(row=row, column=col, padx=5, pady=5)
+    col += 1
+    if col > 3:
+        col = 0
+        row += 1
+
+app.mainloop()
